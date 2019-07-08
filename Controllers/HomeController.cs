@@ -24,7 +24,7 @@ namespace QuotingDojo.Controllers
         {
             if(ModelState.IsValid)
             {
-                string query = $"INSERT INTO users (Name, Quote) VALUES ('{user.Name}', '{user.Quote}')";
+                string query = $"INSERT INTO users (Name, Quote, created_at, updated_at) VALUES ('{user.Name}', '{user.Quote}', NOW(), NOW())";
                 DbConnector.Execute(query);
                 return RedirectToAction("Show", user);
             }
@@ -37,7 +37,7 @@ namespace QuotingDojo.Controllers
         [HttpGet("quotes")]
         public IActionResult Show()
         {
-            List<Dictionary<string, object>> AllUsers = DbConnector.Query("SELECT * FROM users");
+            List<Dictionary<string, object>> AllUsers = DbConnector.Query("SELECT * FROM users ORDER BY created_at DESC");
             ViewBag.AllUsers = AllUsers;
             return View("Show");
         }
